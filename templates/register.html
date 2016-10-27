@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block stylesheet %}
+    <style type="text/css">
+        .jumbotron{
+            background: url(../static/img/hand_writing_book_man_7986_1920x1080.jpg) no-repeat center center;
+        }
+    </style>
+{% end block stylesheet %}
+{% block jumbotron %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="intro-message">
+                    <h2>وب سرویس ویرایش متن فارسی</h2>
+                    <P>برخی از توانایی‌های این وبسرویس در زیر آمده است. در تلاشیم تا روز به روز بر این توانایی‌ها بیافزاییم.</P>
+                    <ul>
+                        <li>ویرایش از نظر اصول فاصله و نیم‌فاصله‌گذاری تایپ فارسی</li>
+                        <li>فارسی‌سازی عددهای عربی و انگلیسی</li>
+                        <li>فارسی‌سازی نویسه‌های عربی</li>
+                        <li>فارسی‌سازی نشانه‌های نگارشی</li>
+                        <li>ویرایش نشانه‌‌گذاری‌ها</li>
+                        <li>ویرایش نیم‌فاصله‌گذاری برخی از پیشوندها و پسوندهای رایج</li>
+                        <li>حذف فاصله‌های اضافی متن</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% end block jumbotron %}
+
+{% block content %}
+<div class="content-section backgroundf8f8f8">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="colorRed">همین الان به صورت رایگان شروع کنید</h2>
+                <h3>دریافت توکن</h3>
+                <br>
+                <div class="token">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="sr-only" for="exampleInputEmail3">آدرس ایمیل</label>
+                            <input type="email" class="form-control margin-bottom-5" placeholder="ایمیل ">
+                            <button class="register btn btn-success">دریافت توکن</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="colorRed">آموزش استفاده از وب سرویس</h2>
+                <h3>ساختار یک درخواست</h3>
+                <ul>
+                    <li>ارسال درخواست به روش post می باشد</li>
+                    <li>آدرس api را http://localhost:8080/api/text_editor وارد کنید</li>
+                    <li>مقدار کلید های توکن(token) و متن(text) را به body بفرستید</li>
+                </ul>
+                <br>
+                <h3>ساختار پاسخ سامانه</h3>
+                <ul style="list-style: decimal">
+                    <li>Err: در صورتی که درخواست شما با خطا مواجه شود دارای مقدار 1 است. در غیر اینصورت مقدار صفر را باز میگرداند</li>
+                    <li>Msg: در صورتی که Err برابر با یک بود پیغام خطا را می توانید از Msg دریافت نمایید. در غیر اینصورت Msg برابر صفر است</li>
+                    <li>Res: در صورتی که Err برابر صفر باشد دیتای درخواست شده در قالب آرایه در Res قرار می گیرد.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% end block content %}
+
+{% block javascript %}
+    <script>
+    $(".register").click(function() {
+                var email = $("input[type='email']").val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/register',
+                    data: {email:email},
+                    success: function (response) {
+                        var res=JSON.parse(response);
+                        if (res['Err'] == 1){
+                            alert(res['Msg'])
+                        }
+                        else {
+                            $(".token").html("<h5>توکن شما برای اتصال به وب سرویس "+res['Res']+" می باشد. لطفا آن را یادداشت نمایید. </h5>")
+                        }
+                    },
+                    error: function () {
+                        alert("Error.....");
+                    }
+                });
+            });
+    </script>
+{% end block javascript %}
